@@ -1,4 +1,5 @@
 ﻿using Domain;
+using Shouldly;
 using Xunit;
 
 namespace Domain.Tests
@@ -18,14 +19,21 @@ namespace Domain.Tests
             Assert.Equal(0, _hand.NrOfCards);
         }
 
-        [Fact(Skip="Not yet implemented")]
+        [Fact]
         public void AddCard_EmptyHand_ResultsInHandWithOneCard()
         {
+            _hand.AddCard(new BlackJackCard(Suit.Hearts, FaceValue.Ace));
+            _hand.NrOfCards.ShouldBe(1);
         }
 
-        [Fact(Skip="Not yet implemented")]
+        [Fact]
         public void AddCard_AHandWithCards_AddsACard()
         {
+            _hand.AddCard(new BlackJackCard(Suit.Clubs, FaceValue.Eight));
+            _hand.AddCard(new BlackJackCard(Suit.Clubs, FaceValue.Eight));
+            _hand.NrOfCards.ShouldBe(2);
+            foreach (BlackJackCard c in _hand.Cards)
+                c.GetType().ShouldBe(typeof(BlackJackCard));
         }
 
         [Fact]
@@ -41,39 +49,60 @@ namespace Domain.Tests
                 Assert.True(c.FaceUp);
         }
 
-        [Fact(Skip = "Not yet implemented")]
+        [Fact]
         public void Value_EmptyHand_IsZero()
         {
+            Assert.Equal(0, _hand.Value);
         }
 
-        [Fact(Skip = "Not yet implemented")]
-        public void Value_HandWith6and5_Is11()
+        [Theory]
+        [InlineData(FaceValue.Six, FaceValue.Five, 11)]
+        [InlineData(FaceValue.Five, FaceValue.King, 15)]
+        public void Value_HandWith6and5_Is11(FaceValue v1, FaceValue v2, int result)
         {
+            BlackJackCard c1 = new BlackJackCard(Suit.Clubs, v1);
+            BlackJackCard c2 = new BlackJackCard(Suit.Clubs, v2);
+            
+            c1.TurnCard();
+            c2.TurnCard();
+            _hand.AddCard(c1);
+            _hand.AddCard(c2);
+            
+            _hand.Value.ShouldBe(result);
         }
 
-        [Fact(Skip = "Not yet implemented")]
-        public void Value_HandWith5AndKing_Is15()
-        {
-        }
-
-        [Fact(Skip = "Not yet implemented")]
+        [Fact]
         public void Value_HandWithCardsFacingDown_DoesNotAddValuesOfCardsFacingDown()
         {
+            BlackJackCard c1 = new BlackJackCard(Suit.Clubs, FaceValue.Ten);
+            BlackJackCard c2 = new BlackJackCard(Suit.Clubs, FaceValue.Two);
+            
+            c1.TurnCard();
+            _hand.AddCard(c1);
+            _hand.AddCard(c2);
+
+            _hand.Value.ShouldBe(10);
         }
 
-        [Fact(Skip = "Not yet implemented")]
+        [Fact]
         public void Value_HandWithAceAndNotExceeding21_TakesAceAs11()
         {
             _hand.AddCard(new BlackJackCard(Suit.Clubs, FaceValue.Seven));
             _hand.AddCard(new BlackJackCard(Suit.Clubs, FaceValue.Ace));
             _hand.TurnAllCardsFaceUp();
 
-            Assert.Equal(18, _hand.Value);
+            _hand.Value.ShouldBe(18);
         }
 
-        [Fact(Skip = "Not yet implemented")]
+        [Fact]
         public void ValueHandWithAceAndExceeding21_TakesAceAs1()
         {
+            _hand.AddCard(new BlackJackCard(Suit.Clubs, FaceValue.Seven));
+            _hand.AddCard(new BlackJackCard(Suit.Clubs, FaceValue.Eight));
+            _hand.AddCard(new BlackJackCard(Suit.Clubs, FaceValue.Ace));
+            _hand.TurnAllCardsFaceUp();
+
+            _hand.Value.ShouldBe(16);
         }
 
         [Fact]
@@ -83,7 +112,8 @@ namespace Domain.Tests
             _hand.AddCard(new BlackJackCard(Suit.Clubs, FaceValue.Two));
             _hand.TurnAllCardsFaceUp();
             _hand.AddCard(new BlackJackCard(Suit.Clubs, FaceValue.Ace));
-            Assert.Equal(4, _hand.Value);
+            
+            _hand.Value.ShouldBe(4);
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Domain;
 
-class Deck
+public class Deck
 {
     protected IList<BlackJackCard> _cards { get; set; }
     private Random _random;

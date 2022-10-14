@@ -1,29 +1,46 @@
-﻿namespace Domain;
+﻿using System.Reflection.Metadata.Ecma335;
 
-class Hand
+namespace Domain;
+
+public class Hand
 {
     private IList<BlackJackCard> _cards;
-    IEnumerable<BlackJackCard> Cards { get; };
-    int NrOfCards { get; }
-    int Value { get; }
+    public IEnumerable<BlackJackCard> Cards { get => _cards.AsEnumerable(); }
+    public int NrOfCards { get => _cards.Count; }
+    public int Value { get => CalculateValue(); }
 
     public Hand()
     {
-        
+        _cards = new List<BlackJackCard>();
     }
 
     public void AddCard(BlackJackCard card)
     {
-        throw new NotImplementedException();
+        _cards.Add(card);
     }
 
     public void TurnAllCardsFaceUp()
     {
-        throw new NotImplementedException();
+        foreach (BlackJackCard card in _cards)
+            card.FaceUp = true;
     }
 
     private int CalculateValue()
     {
-        throw new NotImplementedException();
+        int result = 0;
+        foreach (BlackJackCard card in _cards)
+        {
+            if (card.FaceUp == false) continue;
+            if (card.FaceValue == FaceValue.Ace) {
+                if (result + 11 > 21)
+                    result += 1;
+                else
+                    result += 11;
+            }
+            else { 
+                result += card.Value;
+            }
+        }
+        return result;
     }
 }

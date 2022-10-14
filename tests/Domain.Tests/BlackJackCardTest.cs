@@ -22,7 +22,7 @@ namespace Domain.Tests {
             Assert.True(card.FaceUp);
         }
 
-        [Fact(Skip = "Not yet implemented")]
+        [Fact]
         public void TurnCard_CardFaceUp_TurnsCardToFaceDown()
         {
             BlackJackCard card = new BlackJackCard(Suit.Hearts, FaceValue.Ace);
@@ -31,7 +31,7 @@ namespace Domain.Tests {
             Assert.False(card.FaceUp);
         }
 
-        [Fact(Skip = "Not yet implemented")]
+        [Fact]
         public void Value_CardFaceUp_GivesCorrectValue()
         {
             BlackJackCard card = new BlackJackCard(Suit.Hearts, FaceValue.King);
@@ -39,7 +39,7 @@ namespace Domain.Tests {
             Assert.Equal(10, card.Value);
         }
 
-        [Fact(Skip = "Not yet implemented")]
+        [Fact]
         public void Value_CardFaceDown_IsZero()
         {
            BlackJackCard card = new BlackJackCard(Suit.Hearts, FaceValue.Ace);

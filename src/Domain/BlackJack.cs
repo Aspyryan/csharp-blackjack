@@ -1,12 +1,12 @@
 ﻿namespace Domain;
 
-class BlackJack
+public class BlackJack
 {
     private Deck _deck;
     public Hand PlayerHand { get; }
     public Hand DealerHand { get; }
-    bool FaceDown;
-    bool FaceUp;
+    public bool FaceDown;
+    public bool FaceUp;
     public GameState GameState { get; private set; }
 
     public BlackJack()

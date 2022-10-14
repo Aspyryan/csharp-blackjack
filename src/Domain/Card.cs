@@ -1,9 +1,9 @@
 ﻿namespace Domain;
 
-class Card
+public class Card
 {
-    FaceValue FaceValue { get; }
-    Suit Suit { get; }
+    public FaceValue FaceValue { get; }
+    public Suit Suit { get; }
 
     public Card(Suit suit, FaceValue faceValue)
     {
